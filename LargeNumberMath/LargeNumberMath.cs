@@ -43,5 +43,20 @@ namespace LargeNumberMath
 
             return product;
         }
+
+        // <summary>
+        // Function for finding factorial of a number (must be an interger).
+        // </summary>
+        public string factorial(int number)
+        {
+            string product = "1"; // Initial start value
+
+            for (int i = number; i > 1; i--)
+            {
+                product = multiply(product, i);
+            }
+
+            return product;
+        }
     }
 }
