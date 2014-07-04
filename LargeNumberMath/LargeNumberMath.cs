@@ -13,6 +13,9 @@ namespace LargeNumberMath
         // </summary>
         public string multiply(string toBeMultiplied, int multiplyBy)
         {
+            if (toBeMultiplied.StartsWith("-") || multiplyBy < 1)
+                throw new Exception("One of the numbers parsed into the function is smaller than 1.");
+
             string product = toBeMultiplied;
             int carry = 0;
             int position;
@@ -49,6 +52,9 @@ namespace LargeNumberMath
         // </summary>
         public string factorial(int number)
         {
+            if (number < 1) // Validation of 'number'
+                throw new Exception("The interger parsed into the function cannot be smaller than 1.");
+
             string product = "1"; // Initial start value
 
             for (int i = number; i > 1; i--)
