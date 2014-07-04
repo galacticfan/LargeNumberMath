@@ -1,0 +1,5 @@
+c:\users\jake\documents\visual studio 2013\Projects\LargeNumberMath\LargeNumberMath\bin\Debug\LargeNumberMath.dll
+c:\users\jake\documents\visual studio 2013\Projects\LargeNumberMath\LargeNumberMath\bin\Debug\LargeNumberMath.pdb
+c:\users\jake\documents\visual studio 2013\Projects\LargeNumberMath\LargeNumberMath\obj\Debug\LargeNumberMath.csprojResolveAssemblyReference.cache
+c:\users\jake\documents\visual studio 2013\Projects\LargeNumberMath\LargeNumberMath\obj\Debug\LargeNumberMath.dll
+c:\users\jake\documents\visual studio 2013\Projects\LargeNumberMath\LargeNumberMath\obj\Debug\LargeNumberMath.pdb
