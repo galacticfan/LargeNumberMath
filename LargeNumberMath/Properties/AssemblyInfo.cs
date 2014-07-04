@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LargeNumberMath")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A C# library for performing maths on super-duper large numbers.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Galacticfan")]
 [assembly: AssemblyProduct("LargeNumberMath")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
+[assembly: AssemblyCopyright("Copyright © Galacticfan - GitHub")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
