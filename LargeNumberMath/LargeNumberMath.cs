@@ -8,6 +8,41 @@ namespace LargeNumberMath
 {
     public class LNMath
     {
+        public string add(void) // A lot of this code is temporary whilst I try to figure out what I'm actually trying to do
+        {
+            string firstNumber = "901"; // note: in reverse
+            string secondNumber = "73";
+            bool carry = false;
+            string result = firstNumber; // large one
+
+            for (int position = 0; position < secondNumber.Length; position++) // start with smallest
+            {
+                int firstNumberDigit = int.Parse(result[position].ToString());
+                int secondNumberDigit = int.Parse(secondNumber[position].ToString());
+                int sumOfDigits = firstNumberDigit + secondNumberDigit;
+
+                int lastNum = sumOfDigits % 10;
+                result = result.Remove(position, 1);
+                result = result.Insert(position, lastNum.ToString());
+
+                carry = false;
+
+                if (sumOfDigits > 9)
+                {
+                    carry = true;
+
+                    int currentCarry = sumOfDigits / 10;
+                    //result = result.Remove(position + 1, 1);
+
+                    int carryResult = int.Parse(result[position + 1].ToString()) + currentCarry;
+
+                    //result = result.Insert(position + 1, carryResult.ToString());
+                    result = result.Replace(result[position + 1], Convert.ToChar(carryResult.ToString())); 
+                }
+
+            }
+        }
+
         // <summary>
         // Multiply a string, which can be a number of any length, by an interger. 
         // </summary>
