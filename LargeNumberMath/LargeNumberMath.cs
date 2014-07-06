@@ -9,6 +9,15 @@ namespace LargeNumberMath
     public class LNMath
     {
         // <summary>
+        // Is console present - used later on for error processing.
+        // </summary>
+        private bool consolePresent()
+        {
+            // False if console present
+            return (System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle != IntPtr.Zero);
+        }
+
+        // <summary>
         // Additon of two numbers in the form of strings.
         // </summary>
         public string add(string firstNum, string secondNum)
@@ -45,38 +54,59 @@ namespace LargeNumberMath
         // </summary>
         public string multiply(string toBeMultiplied, int multiplyBy)
         {
-            if (toBeMultiplied.StartsWith("-") || multiplyBy < 1)
-                throw new Exception("One of the numbers parsed into the function is smaller than 1.");
-
-            string product = toBeMultiplied;
-            int carry = 0;
-            int position;
-
-            for (position = toBeMultiplied.Length; position >= 1; position--)
+            try
             {
-                string currentDigit = product.Substring(position - 1, 1); // Get digit in string value at current index
-                int intDigit = int.Parse(currentDigit);
-                int currentProduct = intDigit * multiplyBy; // Multiply by 'multiplyBy'
+                string product = toBeMultiplied;
+                int carry = 0;
+                int position;
+
+                for (position = toBeMultiplied.Length; position >= 1; position--)
+                {
+                    string currentDigit = product.Substring(position - 1, 1); // Get digit in string value at current index
+                    int intDigit = int.Parse(currentDigit);
+                    int currentProduct = intDigit * multiplyBy; // Multiply by 'multiplyBy'
+                    if (carry != 0)
+                    {
+                        currentProduct += carry % 10; // Add last digit in carry onto product
+                        carry /= 10; // Take digit just added onto 'currentProduct' off of 'carry'
+                    }
+                    int currentCarry = currentProduct / 10; // Take all but the last digit off 'currentProduct' and add it to 'carry'
+                    currentProduct %= 10; // Now only holds last digit
+                    carry += currentCarry;
+
+                    product = product.Remove(position - 1, 1);
+                    product = product.Insert(position - 1, currentProduct.ToString());
+                }
+
+                // Add remaining 'carry' to front of 'product'
                 if (carry != 0)
                 {
-                    currentProduct += carry % 10; // Add last digit in carry onto product
-                    carry /= 10; // Take digit just added onto 'currentProduct' off of 'carry'
+                    product = carry.ToString() + product;
                 }
-                int currentCarry = currentProduct / 10; // Take all but the last digit off 'currentProduct' and add it to 'carry'
-                currentProduct %= 10; // Now only holds last digit
-                carry += currentCarry;
 
-                product = product.Remove(position - 1, 1);
-                product = product.Insert(position - 1, currentProduct.ToString());
+                return product;
             }
-
-            // Add remaining 'carry' to front of 'product'
-            if (carry != 0)
+            catch (Exception ex) // Display error message
             {
-                product = carry.ToString() + product;
-            }
+                // IF statement to work out if console or windows forms being used
+                if (consolePresent() == false)
+                    Console.WriteLine("Something went wrong:\n" + ex.Message);
+                else if (consolePresent() == true)
+                {
+                    System.Windows.Forms.DialogResult diagResult = 
+                        System.Windows.Forms.MessageBox.Show(
+                            "An error occured:\n" + ex.Message + "\nOccured at: " + ex.StackTrace,
+                            "Error Message",
+                            System.Windows.Forms.MessageBoxButtons.RetryCancel,
+                            System.Windows.Forms.MessageBoxIcon.Error
+                        );
 
-            return product;
+                    if (diagResult == System.Windows.Forms.DialogResult.Retry)
+                        multiply(toBeMultiplied, multiplyBy);  
+                }
+
+                return String.Empty;
+            }
         }
 
         // <summary>
@@ -96,5 +126,6 @@ namespace LargeNumberMath
 
             return product;
         }
+
     }
 }
