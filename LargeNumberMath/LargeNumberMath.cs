@@ -20,7 +20,7 @@ namespace LargeNumberMath
         // <summary>
         // A method to reverse the order of a string.
         // </summary>
-        static string ReverseInput(string inputString)
+        private string ReverseInput(string inputString)
         {
             char[] charArray = inputString.ToCharArray();
             Array.Reverse(charArray);
@@ -30,7 +30,7 @@ namespace LargeNumberMath
         // <summary>
         // Additon of two numbers in the form of strings.
         // </summary>
-        static string Add(string firstNumInput, string secondNumInput)
+        public string Add(string firstNumInput, string secondNumInput)
         {
             // Reverse order of input strings
             string firstNum = ReverseInput(firstNumInput);
