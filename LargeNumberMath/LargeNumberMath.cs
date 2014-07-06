@@ -8,39 +8,36 @@ namespace LargeNumberMath
 {
     public class LNMath
     {
-        public string add(void) // A lot of this code is temporary whilst I try to figure out what I'm actually trying to do
+        // <summary>
+        // Additon of two numbers in the form of strings.
+        // </summary>
+        public string add(string firstNum, string secondNum)
         {
-            string firstNumber = "901"; // note: in reverse
-            string secondNumber = "73";
-            bool carry = false;
-            string result = firstNumber; // large one
+            // Check to see which is larger number
+            string firstNumString = firstNum.Length >= secondNum.Length ? firstNum : secondNum; // Larger number
+            string secondNumString = firstNum.Length >= secondNum.Length ? secondNum : firstNum;
 
-            for (int position = 0; position < secondNumber.Length; position++) // start with smallest
+            int lenOfFirstNum = firstNumString.Length - 1;
+            int lenOfSecondNum = secondNumString.Length - 1;
+            int differenceOfLen = lenOfFirstNum - lenOfSecondNum;
+            int carry = 0;
+
+            string reference = "01234567890123456789";
+            string result = String.Empty;
+
+            for (int i = lenOfFirstNum; i >= 0; i--)
             {
-                int firstNumberDigit = int.Parse(result[position].ToString());
-                int secondNumberDigit = int.Parse(secondNumber[position].ToString());
-                int sumOfDigits = firstNumberDigit + secondNumberDigit;
+                int ix = reference.IndexOf(firstNumString[i]);
+                if (i <= lenOfSecondNum + differenceOfLen && lenOfFirstNum - i <= lenOfSecondNum)
+                    ix += reference.IndexOf(secondNumString[i - differenceOfLen]);
+                ix += carry;
+                carry = ix > 9 ? 1 : 0;
 
-                int lastNum = sumOfDigits % 10;
-                result = result.Remove(position, 1);
-                result = result.Insert(position, lastNum.ToString());
-
-                carry = false;
-
-                if (sumOfDigits > 9)
-                {
-                    carry = true;
-
-                    int currentCarry = sumOfDigits / 10;
-                    //result = result.Remove(position + 1, 1);
-
-                    int carryResult = int.Parse(result[position + 1].ToString()) + currentCarry;
-
-                    //result = result.Insert(position + 1, carryResult.ToString());
-                    result = result.Replace(result[position + 1], Convert.ToChar(carryResult.ToString())); 
-                }
-
+                result = reference[ix] + result;
             }
+
+            // Return result
+            return carry > 0 ? result = '1' + result : result;
         }
 
         // <summary>
