@@ -11,48 +11,68 @@ namespace LargeNumberMath
         // <summary>
         // Is console present - used later on for error processing.
         // </summary>
-        private bool consolePresent()
+        private bool ConsolePresent()
         {
             // False if console present
             return (System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle != IntPtr.Zero);
         }
 
         // <summary>
+        // A method to reverse the order of a string.
+        // </summary>
+        static string ReverseInput(string inputString)
+        {
+            char[] charArray = inputString.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
+        // <summary>
         // Additon of two numbers in the form of strings.
         // </summary>
-        public string add(string firstNum, string secondNum)
+        static string Add(string firstNumInput, string secondNumInput)
         {
-            // Check to see which is larger number
-            string firstNumString = firstNum.Length >= secondNum.Length ? firstNum : secondNum; // Larger number
-            string secondNumString = firstNum.Length >= secondNum.Length ? secondNum : firstNum;
+            // Reverse order of input strings
+            string firstNum = ReverseInput(firstNumInput);
+            string secondNum = ReverseInput(secondNumInput);
 
-            int lenOfFirstNum = firstNumString.Length - 1;
-            int lenOfSecondNum = secondNumString.Length - 1;
-            int differenceOfLen = lenOfFirstNum - lenOfSecondNum;
+            char[] result = new char[Math.Max(firstNum.Length, secondNum.Length) + 1]; // Set to largest number
+            int resultLength = 0;
             int carry = 0;
 
-            string reference = "01234567890123456789";
-            string result = String.Empty;
-
-            for (int i = lenOfFirstNum; i >= 0; i--)
+            // Treat the two numbers as having the same length by 'virtually' padding the shorter number with zeroes
+            for (int i = 0; i < Math.Max(firstNum.Length, secondNum.Length); i++)
             {
-                int ix = reference.IndexOf(firstNumString[i]);
-                if (i <= lenOfSecondNum + differenceOfLen && lenOfFirstNum - i <= lenOfSecondNum)
-                    ix += reference.IndexOf(secondNumString[i - differenceOfLen]);
-                ix += carry;
-                carry = ix > 9 ? 1 : 0;
+                int an = (i < firstNum.Length) ? int.Parse(firstNum[i].ToString()) : 0;
+                int bn = (i < secondNum.Length) ? int.Parse(secondNum[i].ToString()) : 0;
+                // Add the two digits and the carry
+                int rn = an + bn + carry;
 
-                result = reference[ix] + result;
+                if (rn > 9)
+                {
+                    carry = 1;
+                    rn -= 10;
+                }
+                else
+                {
+                    carry = 0;
+                }
+
+                result[resultLength++] = (char)(rn + '0');
             }
 
-            // Return result
-            return carry > 0 ? result = '1' + result : result;
+            // When carry isn't 0, store it in the result
+            if (carry != 0)
+                result[resultLength++] = '1';
+
+            // Create the result string from the char array and reverse order
+            return ReverseInput(new string(result, 0, resultLength));
         }
 
         // <summary>
         // Multiply a string, which can be a number of any length, by an interger. 
         // </summary>
-        public string multiply(string toBeMultiplied, int multiplyBy)
+        public string Multiply(string toBeMultiplied, int multiplyBy)
         {
             try
             {
@@ -89,9 +109,9 @@ namespace LargeNumberMath
             catch (Exception ex) // Display error message
             {
                 // IF statement to work out if console or windows forms being used
-                if (consolePresent() == false)
+                if (ConsolePresent() == false)
                     Console.WriteLine("Something went wrong:\n" + ex.Message);
-                else if (consolePresent() == true)
+                else if (ConsolePresent() == true)
                 {
                     System.Windows.Forms.DialogResult diagResult = 
                         System.Windows.Forms.MessageBox.Show(
@@ -102,7 +122,7 @@ namespace LargeNumberMath
                         );
 
                     if (diagResult == System.Windows.Forms.DialogResult.Retry)
-                        multiply(toBeMultiplied, multiplyBy);  
+                        Multiply(toBeMultiplied, multiplyBy);  
                 }
 
                 return String.Empty;
@@ -112,7 +132,7 @@ namespace LargeNumberMath
         // <summary>
         // Function for finding factorial of a number (must be an interger).
         // </summary>
-        public string factorial(int number)
+        public string Factorial(int number)
         {
             if (number < 1) // Validation of 'number'
                 throw new Exception("The interger parsed into the function cannot be smaller than 1.");
@@ -121,7 +141,7 @@ namespace LargeNumberMath
 
             for (int i = number; i > 1; i--)
             {
-                product = multiply(product, i);
+                product = Multiply(product, i);
             }
 
             return product;
