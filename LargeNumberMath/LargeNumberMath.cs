@@ -43,22 +43,22 @@ namespace LargeNumberMath
             // Treat the two numbers as having the same length by 'virtually' padding the shorter number with zeroes
             for (int i = 0; i < Math.Max(firstNum.Length, secondNum.Length); i++)
             {
-                int an = (i < firstNum.Length) ? int.Parse(firstNum[i].ToString()) : 0;
-                int bn = (i < secondNum.Length) ? int.Parse(secondNum[i].ToString()) : 0;
+                int currentDigFirstNum = (i < firstNum.Length) ? int.Parse(firstNum[i].ToString()) : 0;
+                int currentDigSecondNum = (i < secondNum.Length) ? int.Parse(secondNum[i].ToString()) : 0;
                 // Add the two digits and the carry
-                int rn = an + bn + carry;
+                int sumOfDigts = currentDigFirstNum + currentDigSecondNum + carry;
 
-                if (rn > 9)
+                if (sumOfDigts > 9)
                 {
                     carry = 1;
-                    rn -= 10;
+                    sumOfDigts -= 10;
                 }
                 else
                 {
                     carry = 0;
                 }
 
-                result[resultLength++] = (char)(rn + '0');
+                result[resultLength++] = (char)(sumOfDigts + '0');
             }
 
             // When carry isn't 0, store it in the result
@@ -72,10 +72,30 @@ namespace LargeNumberMath
         // <summary>
         // Multiply a string, which can be a number of any length, by an interger. 
         // </summary>
-        public string Multiply(string toBeMultiplied, int multiplyBy)
+        public string Multiply(string toBeMultipliedInput, int multiplyBy)
         {
             try
             {
+                string toBeMultiplied = String.Empty;
+                bool productNeg = false;
+
+                if (toBeMultipliedInput[0] == '-')
+                {
+                    productNeg = true;
+                    toBeMultiplied = toBeMultipliedInput.Substring(0);
+                }
+                else if (multiplyBy < 0)
+                {
+                    productNeg = true;
+                    multiplyBy *= -1;
+                }
+                else if (toBeMultipliedInput[0] == '-' && multiplyBy < 0)
+                {
+                    toBeMultiplied = toBeMultipliedInput.Substring(0);
+                    multiplyBy *= -1;
+                }
+                else { toBeMultiplied = toBeMultipliedInput; }
+
                 string product = toBeMultiplied;
                 int carry = 0;
                 int position;
@@ -104,25 +124,30 @@ namespace LargeNumberMath
                     product = carry.ToString() + product;
                 }
 
-                return product;
+                if (productNeg)
+                {
+                    string newProduct = '-' + product;
+                    return newProduct;
+                }
+                else { return product; }
             }
             catch (Exception ex) // Display error message
             {
                 // IF statement to work out if console or windows forms being used
                 if (ConsolePresent() == false)
-                    Console.WriteLine("Something went wrong:\n" + ex.Message);
+                    Console.WriteLine("An error occured:\n" + ex.Message + "\nOccured at: " + ex.StackTrace.ToString());
                 else if (ConsolePresent() == true)
                 {
                     System.Windows.Forms.DialogResult diagResult = 
                         System.Windows.Forms.MessageBox.Show(
-                            "An error occured:\n" + ex.Message + "\nOccured at: " + ex.StackTrace,
+                            "An error occured:\n" + ex.Message + "\nOccured at: " + ex.StackTrace.ToString(),
                             "Error Message",
                             System.Windows.Forms.MessageBoxButtons.RetryCancel,
                             System.Windows.Forms.MessageBoxIcon.Error
                         );
 
                     if (diagResult == System.Windows.Forms.DialogResult.Retry)
-                        Multiply(toBeMultiplied, multiplyBy);  
+                        Multiply(toBeMultipliedInput, multiplyBy);  
                 }
 
                 return String.Empty;
@@ -134,7 +159,7 @@ namespace LargeNumberMath
         // </summary>
         public string Factorial(int number)
         {
-            if (number < 1) // Validation of 'number'
+            if (number < 1) // Validation of input
                 throw new Exception("The interger parsed into the function cannot be smaller than 1.");
 
             string product = "1"; // Initial start value
