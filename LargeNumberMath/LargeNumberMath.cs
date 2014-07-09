@@ -78,6 +78,55 @@ namespace LargeNumberMath
             string secondNum = String.Empty;
             bool negative = false;
 
+            // Check to see if 'Add()' method should be used instead and deal with minus inputs
+            if (firstNumInput.StartsWith("-") && secondNumInput.StartsWith("-") == false)
+            {
+                return "-" + Add(firstNumInput.TrimStart('-'), secondNumInput);
+            }
+            else if (firstNumInput.StartsWith("-") == false && secondNumInput.StartsWith("-"))
+            {
+                return Add(firstNumInput, secondNumInput.TrimStart('-'));
+            }
+            else if (firstNumInput.StartsWith("-") && secondNumInput.StartsWith("-"))
+            {
+                string firstNumTrim = firstNumInput.TrimStart('-');
+                string secondNumTrim = secondNumInput.TrimStart('-');
+
+                if (firstNumTrim.Length > secondNumTrim.Length)
+                {
+                    firstNumInput = firstNumTrim;
+                    secondNumInput = secondNumTrim;
+                }
+                else if (firstNumTrim.Length < secondNumTrim.Length)
+                {
+                    firstNumInput = secondNumTrim;
+                    secondNumInput = firstNumTrim;
+                }
+                else if (firstNumTrim.Length == secondNumTrim.Length)
+                {
+                    for (int i = 0; i <= firstNumTrim.Length; i++)
+                    {
+                        if (firstNumInput[i] > secondNumInput[i])
+                        {
+                            firstNumInput = firstNumTrim;
+                            secondNumInput = secondNumTrim;
+                            negative = true;
+                            break;
+                        }
+                        else if (firstNumInput[i] < secondNumInput[i])
+                        {
+                            firstNumInput = secondNumTrim;
+                            secondNumInput = firstNumTrim;
+                            break;
+                        }
+                    }
+
+                    // Must be equal to eachother if one still contains a minus
+                    if (firstNumInput.Contains('-'))
+                        return "0";
+                }
+            }
+
             // Reverse order of string input and set 'firstNum' to largest
             if (firstNumInput.Length > secondNumInput.Length)
             {
@@ -132,10 +181,7 @@ namespace LargeNumberMath
                     carry = 1;
                     difference += 10;
                 }
-                else
-                {
-                    carry = 0;
-                }
+                else { carry = 0; }
 
                 result[resultLength++] = (char)(difference + '0');
             }
