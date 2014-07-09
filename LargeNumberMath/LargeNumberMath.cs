@@ -93,6 +93,27 @@ namespace LargeNumberMath
             else if (firstNumInput.Length == secondNumInput.Length)
             {
                 // Iterate through strings to find largest
+                for (int i = 0; i <= firstNumInput.Length - 1; i++)
+                {
+                    if (firstNumInput[i] > secondNumInput[i])
+                    {
+                        firstNum = ReverseInput(firstNumInput);
+                        secondNum = ReverseInput(secondNumInput);
+                        break;
+                    }
+                    else if (firstNumInput[i] < secondNumInput[i])
+                    {
+                        firstNum = ReverseInput(secondNumInput);
+                        secondNum = ReverseInput(firstNumInput);
+                        negative = true;
+                        break;
+                    }
+                }
+
+                if (firstNum == String.Empty && secondNum == String.Empty)
+                {
+                    return "0"; // Must be equal to each other
+                }
             }
 
             char[] result = new char[firstNum.Length + 1];
@@ -124,7 +145,7 @@ namespace LargeNumberMath
 
             // Remove any leading zeros
             bool isZero = false;
-            for (int i = 0; i < finalResult.Length - 1; i++)
+            for (int i = 0; i <= finalResult.Length - 1; i++)
             {
                 if (finalResult[i] == '0')
                 {
