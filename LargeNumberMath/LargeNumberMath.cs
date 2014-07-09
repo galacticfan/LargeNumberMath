@@ -70,6 +70,86 @@ namespace LargeNumberMath
         }
 
         // <summary>
+        // Subtraction of two numbers in the form of strings.
+        // </summary>
+        public string Subtract(string firstNumInput, string secondNumInput)
+        {
+            string firstNum = String.Empty;
+            string secondNum = String.Empty;
+            bool negative = false;
+
+            // Reverse order of string input and set 'firstNum' to largest
+            if (firstNumInput.Length > secondNumInput.Length)
+            {
+                firstNum = ReverseInput(firstNumInput);
+                secondNum = ReverseInput(secondNumInput);
+            }
+            else if (firstNumInput.Length < secondNumInput.Length)
+            {
+                negative = true;
+                firstNum = ReverseInput(secondNumInput);
+                secondNum = ReverseInput(firstNumInput);
+            }
+            else if (firstNumInput.Length == secondNumInput.Length)
+            {
+                // Iterate through strings to find largest
+            }
+
+            char[] result = new char[firstNum.Length + 1];
+            int resultLength = 0;
+            int carry = 0;
+
+            for (int i = 0; i < firstNum.Length; i++)
+            {
+                int currentDigFirstNum = (i < firstNum.Length) ? int.Parse(firstNum[i].ToString()) : 0;
+                int currentDigSecondNum = (i < secondNum.Length) ? int.Parse(secondNum[i].ToString()) : 0;
+                // Work out the difference
+                int difference = currentDigFirstNum - currentDigSecondNum - carry;
+
+                if (difference < 0)
+                {
+                    carry = 1;
+                    difference += 10;
+                }
+                else
+                {
+                    carry = 0;
+                }
+
+                result[resultLength++] = (char)(difference + '0');
+            }
+
+            // Create the result string from the char array and reverse order
+            string finalResult = ReverseInput(new string(result, 0, resultLength));
+
+            // Remove any leading zeros
+            bool isZero = false;
+            for (int i = 0; i < finalResult.Length - 1; i++)
+            {
+                if (finalResult[i] == '0')
+                {
+                    isZero = true;
+                }
+                else
+                {
+                    isZero = false;
+                    break;
+                }
+            }
+
+            if (isZero)
+                return "0";
+            else
+                finalResult = finalResult.TrimStart('0');
+
+            // Check to see if answer is negative
+            if (negative)
+                finalResult = '-' + finalResult;
+
+            return finalResult;
+        }
+
+        // <summary>
         // Multiply a string, which can be a number of any length, by an interger. 
         // </summary>
         public string Multiply(string toBeMultipliedInput, int multiplyBy)
