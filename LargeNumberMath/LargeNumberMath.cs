@@ -28,10 +28,82 @@ namespace LargeNumberMath
         }
 
         // <summary>
+        // A method to find the largest number from two strings of equal length.
+        // </summary>
+        private int LargestNumber(string firstNum, string secondNum)
+        {
+            int longest = 0;
+
+            for (int i = 0; i < firstNum.Length; i++)
+            {
+                if (firstNum[i] > secondNum[i])
+                {
+                    longest = 1;
+                    break;
+                }
+                else if (firstNum[i] < secondNum[i])
+                {
+                    longest = 2;
+                    break;
+                }
+            }
+
+            return longest;
+        }
+
+        // <summary>
         // Additon of two numbers in the form of strings.
         // </summary>
         public string Add(string firstNumInput, string secondNumInput)
         {
+            // Check to see if should be using 'Subtract()' method instead
+            if (firstNumInput.StartsWith("-") && secondNumInput.StartsWith("-") == false)
+            {
+                if (firstNumInput.TrimStart('-').Length > secondNumInput.Length)
+                {
+                    return "-" + Subtract(firstNumInput.TrimStart('-'), secondNumInput);
+                }
+                else if (firstNumInput.TrimStart('-').Length < secondNumInput.Length)
+                {
+                    return Subtract(secondNumInput, firstNumInput.TrimStart('-'));
+                }
+                else if (firstNumInput.TrimStart('-').Length == secondNumInput.Length)
+                {
+                    int resultOfLargest = LargestNumber(firstNumInput.TrimStart('-'), secondNumInput);
+                    if (resultOfLargest == 1)
+                        return "-" + Subtract(firstNumInput.TrimStart('-'), secondNumInput);
+                    else if (resultOfLargest == 2)
+                        return Subtract(secondNumInput, firstNumInput.TrimStart('-'));
+                    else if (resultOfLargest == 0)
+                        return "0";
+                }
+            }
+            else if (firstNumInput.StartsWith("-") == false && secondNumInput.StartsWith("-"))
+            {
+                if (firstNumInput.Length > secondNumInput.TrimStart('-').Length)
+                {
+                    return Subtract(firstNumInput, secondNumInput.TrimStart('-'));
+                }
+                else if (firstNumInput.Length < secondNumInput.TrimStart('-').Length)
+                {
+                    return "-" + Subtract(secondNumInput.TrimStart('-'), firstNumInput);
+                }
+                else if (firstNumInput.Length == secondNumInput.TrimStart('-').Length)
+                {
+                    int resultOfLargest = LargestNumber(firstNumInput, secondNumInput.TrimStart('-'));
+                    if (resultOfLargest == 1)
+                        return Subtract(firstNumInput.TrimStart('-'), secondNumInput);
+                    else if (resultOfLargest == 2)
+                        return "-" + Subtract(firstNumInput.TrimStart('-'), secondNumInput);
+                    else if (resultOfLargest == 0)
+                        return "0";
+                }
+            }
+            else if (firstNumInput.StartsWith("-") && secondNumInput.StartsWith("-"))
+            {
+                return Subtract(firstNumInput, secondNumInput.TrimStart('-'));
+            }
+
             // Reverse order of input strings
             string firstNum = ReverseInput(firstNumInput);
             string secondNum = ReverseInput(secondNumInput);
@@ -104,26 +176,23 @@ namespace LargeNumberMath
                 }
                 else if (firstNumTrim.Length == secondNumTrim.Length)
                 {
-                    for (int i = 0; i <= firstNumTrim.Length; i++)
-                    {
-                        if (firstNumInput[i] > secondNumInput[i])
-                        {
-                            firstNumInput = firstNumTrim;
-                            secondNumInput = secondNumTrim;
-                            negative = true;
-                            break;
-                        }
-                        else if (firstNumInput[i] < secondNumInput[i])
-                        {
-                            firstNumInput = secondNumTrim;
-                            secondNumInput = firstNumTrim;
-                            break;
-                        }
-                    }
+                    int resultOfLargest = LargestNumber(firstNumTrim, secondNumTrim);
 
-                    // Must be equal to eachother if one still contains a minus
-                    if (firstNumInput.Contains('-'))
+                    if (resultOfLargest == 1)
+                    {
+                        firstNumInput = firstNumTrim;
+                        secondNumInput = secondNumTrim;
+                        negative = true;
+                    }
+                    else if (resultOfLargest == 2)
+                    {
+                        firstNumInput = secondNumTrim;
+                        secondNumInput = firstNumTrim;
+                    }
+                    else if (resultOfLargest == 0)
+                    {
                         return "0";
+                    }
                 }
             }
 
