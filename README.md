@@ -4,10 +4,15 @@ LargeNumberMath
 A C# library for performing maths on super-duper large numbers.
 
 <h4>Usage Of The Library:</h4>
-
 For the addition method:
 
-    string result = objName.Add("firstNum", "secondNum");
+    string result = objName.Add("firstNum", "secondNum", false);
+
+For the subtraction method:
+
+    string result = objName.Subtract("firstNum", "secondNum", false);
+<sub><i>*Please note that the bool present in the 'Add()' and 'Subtract()' is optional. If you know that the numbers that are going to be parsed into the function will be positive, then you can set this to true for performance purposes.</i></sub>
+
 For the multipication method:
 
     string result = objName.Multiply("firstNum", intNum);
@@ -15,6 +20,8 @@ For calculating factorials (input number must be larger than 0):
 
     string result = objName.Factorial(intNum);
 Once more methods have been released, the README will be updated.
+
+
 
 <h4>Newbie's Guide:</h4>
 After <a href="https://github.com/galacticfan/LargeNumberMath/wiki/Usage-and-Installation-of-the-DLL">importing</a> your DLL and referencing the library, you are then ready to begin using the supplied methods.
